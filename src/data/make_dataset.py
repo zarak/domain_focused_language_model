@@ -44,10 +44,10 @@ def remove_missing(so):
 
 
 def remove_outliers(so):
-    """Remove the top and bottom 10 percentile of text by char length"""
+    """Remove the top and bottom 5 percentile of text by char length"""
     so['text_lengths'] = so.text.str.len()
-    so = so[so.text_lengths < so.text_lengths.quantile(0.90)]
-    so = so[so.text_lengths > so.text_lengths.quantile(0.10)]
+    so = so[so.text_lengths < so.text_lengths.quantile(0.95)]
+    so = so[so.text_lengths > so.text_lengths.quantile(0.05)]
     return so.drop(columns='text_lengths')
 
 
