@@ -6,6 +6,7 @@ import numpy as np
 import re
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
+from nltk.tokenize import word_tokenize
 
 
 code_exp = re.compile(r"<pre[^>]*>.+?</pre>", re.DOTALL)
@@ -25,7 +26,27 @@ def regex(so):
     ]
 
     for pattern in patterns:
-        so.text.replace(pattern, '', regex=True, inplace=True)
+        so.loc[:, 'text'] = so.text.replace(pattern, '', regex=True)
+    return so
+
+
+def remove_missing(so):
+    so = so.replace('', np.NaN)
+    so = so.dropna(subset=['text'])
+    return so
+
+
+def remove_outliers(so):
+    """Remove the top and bottom 10 percentile of text by char length"""
+    so['text_lengths'] = so.text.str.len()
+    so = so[so.text_lengths < so.text_lengths.quantile(0.90)]
+    so = so[so.text_lengths > so.text_lengths.quantile(0.10)]
+    return so.drop(columns='text_lengths')
+
+
+def pandas_tokenize(text):
+    tokens = word_tokenize(text)
+    return ' '.join(tokens)
 
 
 @click.command()
@@ -41,8 +62,11 @@ def main(input_filepath, output_filepath):
     print(input_filepath)
 
     so = pd.read_csv(Path(input_filepath) / 'stackexchange_812k.csv')
-    regex(so)
-    so.to_csv(Path(output_filepath) / 'regex_processed.csv', index=False)
+    so = regex(so)
+    so = remove_missing(so)
+    so = remove_outliers(so)
+    so.loc[:, 'text'] = so.text.apply(pandas_tokenize)
+    so.to_csv(Path(output_filepath) / 'tokenized.csv', index=False)
 
 
 if __name__ == '__main__':
