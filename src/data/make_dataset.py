@@ -21,12 +21,19 @@ digit_exp = re.compile(r"(?P<digit>\d+\.*\d+)")
 
 def regex(so):
     patterns = [
-        code_exp, url_exp, start_tag, end_tag, latex_exp, latex_exp2,
-        newline_exp, digit_exp
+        code_exp,
+        url_exp,
+        start_tag,
+        end_tag,
+        latex_exp,
+        latex_exp2,
+        # newline_exp,
+        digit_exp
     ]
 
     for pattern in patterns:
         so.loc[:, 'text'] = so.text.replace(pattern, '', regex=True)
+    so.loc[:, 'text'] = so.text.replace(newline_exp, ' ', regex=True)
     return so
 
 
