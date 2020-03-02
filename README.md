@@ -3,6 +3,15 @@ Domain Focused Language Model
 
 Beta testing for Build a Deep Learning Domain Focused Language Model liveProject by Manning
 
+## Deliverables
+
+#### Loading and preparing the dataset
+Place the data file in `data/raw/stackexchange_812k.csv` and then run `make`
+```
+make data
+```
+The output file will appear in `data/processed/tokenized.csv`.
+
 Project Organization
 ------------
 
@@ -55,3 +64,4 @@ Project Organization
 --------
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+
