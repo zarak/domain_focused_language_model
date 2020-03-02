@@ -66,12 +66,14 @@ def main(input_filepath, output_filepath):
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
 
-    print(input_filepath)
-
     so = pd.read_csv(Path(input_filepath) / 'stackexchange_812k.csv')
+    logger.info('running regex...')
     so = regex(so)
+    logger.info('removing empty strings in text column...')
     so = remove_missing(so)
+    logger.info('removing testthat is too long or short...')
     so = remove_outliers(so)
+    logger.info('tokenizing...')
     so.loc[:, 'text'] = so.text.apply(pandas_tokenize)
     so.to_csv(Path(output_filepath) / 'tokenized.csv', index=False)
 
