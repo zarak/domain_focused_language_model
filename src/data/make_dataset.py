@@ -25,7 +25,7 @@ def regex(so):
     ]
 
     for pattern in patterns:
-        so.text.replace(code_exp, '', regex=True, inplace=True)
+        so.text.replace(pattern, '', regex=True, inplace=True)
 
 
 @click.command()
@@ -42,7 +42,7 @@ def main(input_filepath, output_filepath):
 
     so = pd.read_csv(Path(input_filepath) / 'stackexchange_812k.csv')
     regex(so)
-    so.to_csv(Path(output_filepath) / 'regex_processed.csv')
+    so.to_csv(Path(output_filepath) / 'regex_processed.csv', index=False)
 
 
 if __name__ == '__main__':
