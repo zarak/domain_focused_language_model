@@ -71,11 +71,12 @@ def main(input_filepath, output_filepath):
     so = regex(so)
     logger.info('removing empty strings in text column...')
     so = remove_missing(so)
-    logger.info('removing testthat is too long or short...')
+    logger.info('removing long and short text...')
     so = remove_outliers(so)
     logger.info('tokenizing...')
     so.loc[:, 'text'] = so.text.apply(pandas_tokenize)
     so.to_csv(Path(output_filepath) / 'tokenized.csv', index=False)
+    logger.info('done')
 
 
 if __name__ == '__main__':
