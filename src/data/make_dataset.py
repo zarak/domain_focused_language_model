@@ -4,10 +4,12 @@ import logging
 import pandas as pd
 import numpy as np
 import re
-from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 from nltk.tokenize import word_tokenize
+from pathlib import Path
+from tqdm import tqdm
 
+tqdm.pandas(desc="Tokenization")
 
 code_exp = re.compile(r"<pre[^>]*>.+?</pre>", re.DOTALL)
 url_exp = re.compile(r"(?P<url>(http\S+))")
@@ -74,7 +76,7 @@ def main(input_filepath, output_filepath):
     logger.info('removing long and short text...')
     so = remove_outliers(so)
     logger.info('tokenizing...')
-    so.loc[:, 'text'] = so.text.apply(pandas_tokenize)
+    so.loc[:, 'text'] = so.text.progress_apply(pandas_tokenize)
     so.to_csv(Path(output_filepath) / 'tokenized.csv', index=False)
     logger.info('done')
 

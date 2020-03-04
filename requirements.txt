@@ -78,7 +78,6 @@ sphinxcontrib-htmlhelp==1.0.3
 sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.4
--e git+https://github.com/zarak/domain_focused_language_model.git@599154e47e611e483588662c8616716f0f584329#egg=src
 terminado==0.8.3
 testpath==0.4.4
 tornado==6.0.3
