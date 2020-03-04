@@ -5,12 +5,21 @@ Beta testing for Build a Deep Learning Domain Focused Language Model liveProject
 
 ## Deliverables
 
-#### Loading and preparing the dataset
+#### 1. Loading and preparing the dataset
 Place the data file in `data/raw/stackexchange_812k.csv` and then run `make`
 ```
 make data
 ```
 The output file will appear in `data/processed/tokenized.csv`.
+
+#### 2. ngram language model
+
+
+#### 3. Deep learning language model
+
+
+#### 4. Character based language model with AllenNLP
+
 
 Project Organization
 ------------
