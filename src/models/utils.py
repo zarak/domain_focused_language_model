@@ -28,7 +28,7 @@ def count_ngrams(lines, n):
     return counts
 
 
-def create_model(freqs, vocab_size, delta=0):
+def create_model(freqs, vocab_size, delta=1):
     """
     Transform the counts to probabilities.
     Default has no Laplace smoothing.
