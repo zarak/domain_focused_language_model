@@ -14,12 +14,12 @@ def read_files():
     return so
 
 
-def train_test_split(so, sample=True, random_state=0):
+def train_test_split(so, sample_size=None, random_state=0):
     train = so.query("category != 'title'")
     test = so.query("category == 'title'")
-    if sample:
-        train = train.sample(1000, random_state=random_state)
-        test = test.sample(50, random_state=random_state)
+    if sample_size:
+        train = train.sample(sample_size, random_state=random_state)
+        test = test.sample(int(sample_size * 0.2), random_state=random_state)
     return train, test
 
 
@@ -35,8 +35,9 @@ def fit(train, n=3, save_model=False):
 
 
 def main():
+    DATASET_SIZE = 1000
     so = read_files()
-    train, test = train_test_split(so)
+    train, test = train_test_split(so, DATASET_SIZE)
 
     # fit(train)
 

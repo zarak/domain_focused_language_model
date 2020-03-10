@@ -9,6 +9,9 @@ from nltk.tokenize import WordPunctTokenizer
 from utils import PADDING
 
 
+DATASET_SIZE = 2000
+
+
 def is_unknown(model, words):
     prefix, target = words[:-1], words[-1]
     return model[prefix][target] == 0
@@ -100,7 +103,7 @@ def predict(counts, test, ngrams_degree, vocab_set):
 
 def main():
     so = read_files()
-    train, test = train_test_split(so)
+    train, test = train_test_split(so, DATASET_SIZE)
     vocab_set = set(' '.join(train.text.tolist()))
 
     ngram_perplexity = dict()
