@@ -27,11 +27,12 @@ def compute_missing_prob(model, words, vocab_set):
     return missing_prob_total
 
 
-def sentence_prob(model, sentence, vocab_set, min_logprob=np.log(10 ** -50.)):
+def sentence_prob(model, sentence, vocab_set, n=3):
+    """Only handles non OOV words"""
     sentence_split = sentence.split()
     num_words = len(sentence_split)
     trigrams = ngrams(
-        sentence_split, 3,
+        sentence_split, n,
         pad_left=True,
         pad_right=True,
         left_pad_symbol=PADDING.left_pad_symbol,
@@ -39,17 +40,9 @@ def sentence_prob(model, sentence, vocab_set, min_logprob=np.log(10 ** -50.)):
     )
     probs = []
     for words in trigrams:
-        prefix, target = words[:-1], words[-1]
-        if is_unknown(model, words):
-            missing_prob_total = compute_missing_prob(model, words, vocab_set)
-            if (missing_prob_total == 0 or np.log(missing_prob_total)
-                    < min_logprob):
-                probs.append(min_logprob)
-            else:
-                probs.append(np.log(missing_prob_total))
-        else:
+        prefix, target = words[:n-1], words[n-1]
+        if not is_unknown(model, words):
             probs.append(np.log(model[prefix][target]))
-    # return product(probs)
     return np.exp(np.sum((probs))*(-1/num_words))
 
 
@@ -93,11 +86,13 @@ def corpus_perplexity(perplexities, vocab_size):
     return np.exp(np.sum(np.log(perplexities))*(-1/vocab_size))
 
 
-def predict(counts, test, ngrams_degree, vocab_set):
+def predict(model, test, ngrams_degree, vocab_set):
     tqdm.pandas()
     N = len(vocab_set)
+    # perplexities = test.text.progress_apply(
+        # lambda x: perplexity_laplace(x, counts, ngrams_degree))
     perplexities = test.text.progress_apply(
-        lambda x: perplexity_laplace(x, counts, ngrams_degree))
+        lambda x: perplexity(model, x, vocab_set, ngrams_degree))
     return corpus_perplexity(perplexities, N)
 
 
@@ -110,7 +105,7 @@ def main():
     for ngrams_degree in range(1, 6):
         model, counts = fit(train, n=ngrams_degree)
         ngram_perplexity[ngrams_degree] = predict(
-            counts, test, ngrams_degree, vocab_set)
+            model, test, ngrams_degree, vocab_set)
     print(ngram_perplexity)
 
 
