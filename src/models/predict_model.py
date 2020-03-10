@@ -8,7 +8,6 @@ from nltk import ngrams
 from utils import PADDING
 
 
-
 def is_unknown(model, words):
     prefix, target = words[:-1], words[-1]
     return model[prefix][target] == 0
