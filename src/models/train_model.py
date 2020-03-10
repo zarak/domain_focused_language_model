@@ -25,13 +25,13 @@ def train_test_split(so, sample=True, random_state=0):
 
 def fit(train, n=3, save_model=False):
     vocab_set = set(' '.join(train.text.tolist()))
-    freqs = count_ngrams(train.text.tolist(), n)
-    model = create_model(freqs, len(vocab_set))
+    counts = count_ngrams(train.text.tolist(), n)
+    model = create_model(counts, len(vocab_set))
     if save_model:
         print("Saving model as pickle file")
         timestamp = datetime.now()
         pickle.dump(model, open(f"model_n{n}_{timestamp}.p", "wb"))
-    return model
+    return model, counts
 
 
 def main():

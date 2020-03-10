@@ -43,6 +43,7 @@ def create_model(freqs, vocab_size, delta=0):
 
 
 def sentence_perplexity(model, sentence):
+    """Compute sentence perplexity for trigrams"""
     words = sentence.split()
     num_words = len(words)
     trigrams = ngrams(
