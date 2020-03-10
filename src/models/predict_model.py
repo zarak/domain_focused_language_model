@@ -56,7 +56,10 @@ def perplexity(model, sentence, vocab_set, min_logprob=np.log(10 ** -50.)):
 
 
 def perplexity_laplace(sentence, counts, ngrams_degree=3, delta=1):
-    """Handle OOV words and generalize perplexity to ngrams"""
+    """
+    Handle OOV words and generalize perplexity to ngrams
+    Credit: Manning liveProject example solution
+    """
     sentence = WordPunctTokenizer().tokenize(sentence.lower())
     N = len(sentence)
     logprob = 0
