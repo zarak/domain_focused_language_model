@@ -33,6 +33,7 @@ def regex(so):
         digit_exp
     ]
 
+    so.loc[:, 'text'] = so.text.str.lower()
     for pattern in patterns:
         so.loc[:, 'text'] = so.text.replace(pattern, '', regex=True)
     so.loc[:, 'text'] = so.text.replace(newline_exp, ' ', regex=True)
@@ -69,6 +70,7 @@ def main(input_filepath, output_filepath):
     logger.info('making final data set from raw data')
 
     so = pd.read_csv(Path(input_filepath) / 'stackexchange_812k.csv')
+
     logger.info('running regex...')
     so = regex(so)
     logger.info('removing empty strings in text column...')
