@@ -1,5 +1,4 @@
 from train_model import fit, train_test_split, read_files
-
 from utils import sentence_perplexity
 import numpy as np
 import pandas as pd
